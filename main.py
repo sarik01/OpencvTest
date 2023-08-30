@@ -1,13 +1,15 @@
 import cv2
 import numpy as np
 
-list_img = cv2.imread('list_img3.jpg', cv2.COLOR_BGR2GRAY)
-# list_img  = cv2.cvtColor(list_img, cv2.COLOR_BGR2GRAY)
-black_spot = cv2.imread('black_spot.jpg', cv2.COLOR_BGR2GRAY)
+
+
+list_img = cv2.imread('list_img3.jpg', 1)
+list_img  = cv2.cvtColor(list_img, cv2.COLOR_BGR2GRAY)
+black_spot = cv2.imread('black_spot.jpg', 0)
 # black_spot = cv2.cvtColor(black_spot, cv2.COLOR_BGR2GRAY)
-mark1 = cv2.imread('mark1-2.jpg', cv2.COLOR_BGR2GRAY)
+mark1 = cv2.imread('mark1-2.jpg', 0)
 # mark1 = cv2.cvtColor(mark1, cv2.COLOR_BGR2GRAY)
-mark2 = cv2.imread('mark2-2.jpg', cv2.COLOR_BGR2GRAY)
+mark2 = cv2.imread('mark2-2.jpg', 0)
 # mark2 = cv2.cvtColor(mark2, cv2.COLOR_BGR2GRAY)
 
 # cv2.imshow('list', list_img)
@@ -25,6 +27,8 @@ mark2_res = cv2.matchTemplate(list_img, mark2, cv2.TM_CCOEFF_NORMED)
 # cv2.imshow('result', result)
 # cv2.waitKey()
 # cv2.destroyAllWindows()
+
+retval, treshold = cv2.treshold(result, 62, 255, cv2.TRESH_BINARY)
 
 min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
 min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(mark1_res)
