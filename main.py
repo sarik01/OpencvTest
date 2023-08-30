@@ -16,9 +16,9 @@ mark2 = cv2.imread('mark2-2.jpg', 0)
 # cv2.waitKey()
 # cv2.destroyAllWindows()
 
-# cv2.imshow('spot', black_spot)
-# cv2.waitKey()
-# cv2.destroyAllWindows()
+cv2.imshow('spot', black_spot)
+cv2.waitKey()
+cv2.destroyAllWindows()
 
 result = cv2.matchTemplate(list_img, black_spot, cv2.TM_CCOEFF_NORMED)
 mark1_res = cv2.matchTemplate(list_img, mark1, cv2.TM_CCOEFF_NORMED)
@@ -28,11 +28,18 @@ mark2_res = cv2.matchTemplate(list_img, mark2, cv2.TM_CCOEFF_NORMED)
 # cv2.waitKey()
 # cv2.destroyAllWindows()
 
-retval, treshold = cv2.treshold(result, 62, 255, cv2.TRESH_BINARY)
+retval, threshold = cv2.threshold(list_img, 120, 255, cv2.THRESH_BINARY)
+retval_spot, spot_threshold = cv2.threshold(black_spot, 80, 255, cv2.THRESH_BINARY)
+
+result = cv2.matchTemplate(threshold, spot_threshold, cv2.TM_CCOEFF_NORMED)
+
+cv2.imshow('list', spot_threshold)
+cv2.waitKey()
+cv2.destroyAllWindows()
 
 min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(mark1_res)
-min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(mark2_res)
+# min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(mark1_res)
+# min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(mark2_res)
 # print(max_loc)
 # print(max_val)
 
@@ -53,8 +60,8 @@ h_m2 = mark2.shape[0]
 
 treshhold = .90
 
-yloc, xloc = np.where(result >= treshhold)
-# print(len(xloc))
+yloc, xloc = np.where(result >= .90)
+print(len(xloc))
 # print(xloc)
 # print(yloc)
 
@@ -66,7 +73,7 @@ answers = {}
 for i, (x, y) in enumerate(zip(xloc, yloc), 1):
     # print(f'spot{(x, y)}')
     answers[i] = (x, y)
-    cv2.rectangle(list_img, (x, y), (x + w, y + h), (0, 255, 255), 2)
+    cv2.rectangle(threshold, (x, y), (x + w, y + h), (0, 255, 255), 2)
 print(f'answers: {answers}')
 options = {}
 
@@ -86,7 +93,7 @@ print(f'questions: {questions}')
 
 # cv2.rectangle(list_img, (123, 34), (123 + w_m1, 34 + h_m1), (0, 255, 255), 2)
 
-cv2.imshow('list', list_img)
+cv2.imshow('list', threshold)
 cv2.waitKey()
 cv2.destroyAllWindows()
 
